@@ -29,16 +29,38 @@
 		</c:forEach>
 	</table>
 	<hr>
-	<c:forEach begin="1" end="${totalPage }" var="i">
+	<!--  첫번째 페이지로 이동 화살표 -->
+	<!-- 1 페이지로 이동 화살표 -->
+	<c:if test="${currentPage > 1 }">
+	<a href="boardlist?page=1"> ◀◀ </a>
+	</c:if>
+	<!-- 페이지 이전 그룹 이동 화살표 -->
+	<c:if test="${startPage > 1 }">
+	<a href="boardlist?page=${startPage-1 }"> ◀ </a>
+	</c:if>
+	
+	<!-- 페이지 숫자 -->
+	<c:forEach begin="${startPage }" end="${endPage }" var="i">
 		<c:choose>
 			<c:when test="${i == currentPage }">
-				<a href="boardlist?page=${i }"><b style="color: red;"> ${i } </b> </a> 
+				<a href="boardlist?page=${i}"> <b style="color:red;">${i} </b></a> | 
 			</c:when>
 			<c:otherwise>
-				<a href="boardlist?page=${i }"> ${i }  </a> 
+				<a href="boardlist?page=${i}"> ${i} </a> | 
 			</c:otherwise>
-		</c:choose>
+		</c:choose>		
 	</c:forEach>
+	<!-- 페이지 숫자 -->
+	<!-- 페이지로 이동 화살표 -->
+<!-- 페이지 다음 그룹 이동 화살표 -->
+	<c:if test="${endPage < totalPage }">
+	<a href="boardlist?page=${endPage + 1}"> ▶ </a>
+	</c:if> 
+	
+	<!-- 마지막 페이지로 이동 화살표 -->
+	<c:if test="${currentPage < totalPage }">
+	<a href="boardlist?page=${totalPage}"> ▶▶ </a>
+	</c:if>   
 	
 	
 </body>

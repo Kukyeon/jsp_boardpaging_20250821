@@ -14,7 +14,9 @@ import java.util.List;
  */
 @WebServlet("/boardlist") // 보드 리스트 요청만 구현
 public class BoardController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final int PAGE_GROUP_SIZE = 10;
+	// 게시판 하단에 표시 될 현재 글의 갯수로 만들어진 페이지 전체 수
+	
 	BoardDao boardDao = new BoardDao();
     /**
      * @see HttpServlet#HttpServlet()
@@ -46,10 +48,19 @@ public class BoardController extends HttpServlet {
 		List<BoardDto> boardDtos = boardDao.boardList(page);
 		
 		int totalPage = (int)Math.ceil((double)totalBoardCount / boardDao.PAGE_SIZE);
+		int startPage = (((page - 1) / PAGE_GROUP_SIZE) * PAGE_GROUP_SIZE) + 1; 
+		int endPage = startPage + PAGE_GROUP_SIZE - 1;
+		
+		// 꼐산한 endPage 값(startPage + 9)이 실제 마지막 페이지 값보다 작으면 마지막 페이지 값으로 endPage 값을 대체함
+		if(endPage > totalPage) {
+			endPage = totalPage;
+		}
 		
 		request.setAttribute("boardDtos", boardDtos); // 유저가 선택한 페이지에 해당하는 글
 		request.setAttribute("currentPage", page); // 유저가 현재 선택한 페이지 번호
-		request.setAttribute("totalPage", totalPage);
+		request.setAttribute("totalPage", totalPage); // 전체 페이지 개수
+		request.setAttribute("startPage", startPage);
+		request.setAttribute("endPage", endPage);
 		//총 글의 갯수로 표현될 전체 페이지의 수 (47개면 5개 전달)
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("boardList.jsp");
