@@ -20,7 +20,7 @@ public class BoardDao {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
-	private static final int PAGE_SIZE = 10;
+	public static final int PAGE_SIZE = 10;
 	
 	public List<BoardDto> boardList(int page) { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
 		//page 값의 페에지에 해당하는 글 번호 계산
@@ -82,5 +82,48 @@ public class BoardDao {
 		
 	}
 	
+		public int countBoard() { // 게시판 모든글의 갯수를 반환하는 메서드
+		String sql = "SELECT * FROM board";
+		
+		int count = 0;
+		
 	
+		try {
+			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
+			conn = DriverManager.getConnection(url, username, password);
+			//커넥션이 메모리 생성(DB와 연결 커넥션 conn 생성)
+			
+			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
+			
+			rs = pstmt.executeQuery(); //모든 글 리스트(모든 레코드) 반환
+			
+		
+			
+			while(rs.next()) {
+							
+				count++;// rs의 레코드 수 만큼 늘어남
+				
+			}	
+			
+		} catch (Exception e) {
+			System.out.println("DB 에러 발생! 글 갯수 가져오기 실패!");
+			e.printStackTrace(); //에러 내용 출력
+		} finally { //에러의 발생여부와 상관 없이 Connection 닫기 실행 
+			try {
+				if(rs != null) { //rs가 null 이 아니면 닫기(pstmt 닫기 보다 먼저 실행)
+					rs.close();
+				}				
+				if(pstmt != null) { //stmt가 null 이 아니면 닫기(conn 닫기 보다 먼저 실행)
+					pstmt.close();
+				}				
+				if(conn != null) { //Connection이 null 이 아닐 때만 닫기
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count; //모든 글(bDto) 여러 개가 담긴 list인 bDtos를 반환
+		
+	}
 }
