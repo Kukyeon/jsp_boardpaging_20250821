@@ -21,7 +21,12 @@ public class BoardDao {
 	ResultSet rs = null;
 	
 	
-	public List<BoardDto> boardList() { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
+	public List<BoardDto> boardList(int page) { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
+		//page 값의 페에지에 해당하는 글 번호 계산
+		
+		
+		
+		
 		String sql = "SELECT * FROM board ORDER BY bnum DESC";
 		
 		//members 테이블과 board 테이블의 조인 SQL문
