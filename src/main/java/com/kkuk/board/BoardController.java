@@ -39,9 +39,6 @@ public class BoardController extends HttpServlet {
 			page = Integer.parseInt(request.getParameter("page"));
 			//유저가 클릭한 보고싶어하는 페이지의 번호
 		}
-		
-	
-		
 		List<BoardDto> boardDtos = boardDao.boardList(page);
 		
 		request.setAttribute("boardDtos", boardDtos);
